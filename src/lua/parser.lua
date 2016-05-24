@@ -237,7 +237,9 @@ GG = { [1] = CK'' * V'_Stmts' * P(-1)-- + EM'expected EOF')
     , Dcl_adt = KEY'data' * EV'__ID_adt' * EKEY'with'
                *    (V'__Dcl_adt_struct' + V'__Dcl_adt_union')
                * EKEY'end'
-    , __Dcl_adt_struct = Cc'struct' * (V'_Dcl_var_plain' * (EK';'*K';'^0))^1
+    , __Dcl_adt_struct = Cc'struct' * (
+                            (V'_Dcl_var_plain'+V'_Dcl_int') * (EK';'*K';'^0)
+                         )^1
     , __Dcl_adt_union  = Cc'union'  * V'Dcl_adt_tag' * (EKEY'or' * EV'Dcl_adt_tag')^0
     , Dcl_adt_tag    = KEY'tag' * EV'__ID_tag' * EKEY'with'
                       *   (V'_Dcl_var_plain' * (EK';'*K';'^0))^0

@@ -437,12 +437,31 @@ escape 0;
     run = 1,
 }
 
+--]===]
+Test { [[
+data D with
+    event void e;
+end
+
+var D d = D();
+
+par/and do
+    await d.e;
+with
+    await 1s;
+    emit d.e;
+end
+
+escape 1;
+]],
+    run = { ['~>1s']=1 },
+}
+
 do return end
 
 ----------------------------------------------------------------------------
 -- OK: well tested
 ----------------------------------------------------------------------------
---]===]
 
 Test { [[escape (1);]], run=1 }
 Test { [[escape 1;]], run=1 }

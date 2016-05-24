@@ -571,16 +571,18 @@ F = {
             for _, stmts in ipairs(STMTS) do
                 AST.asr(stmts, 'Stmts')
                 for _, dclvar in ipairs(stmts) do
-                    AST.asr(dclvar, 'Dcl_var')
-                    local _, var_tp, var_id = unpack(dclvar)
-                    if TP.check(var_tp,'[]') then
-                        ASR(TP.is_ext(var_tp,'_','@'), dclvar,
-                            '`data´ fields do not support vectors yet')
+                    if dclvar.tag == 'Dcl_var' then
+                        --AST.asr(dclvar, 'Dcl_var')
+                        local _, var_tp, var_id = unpack(dclvar)
+                        if TP.check(var_tp,'[]') then
+                            ASR(TP.is_ext(var_tp,'_','@'), dclvar,
+                                '`data´ fields do not support vectors yet')
+                        end
+                        local item = AST.node('TupleTypeItem', me.ln,
+                                        false,var_tp,false)
+                        me.tup[#me.tup+1] = item
+                        item.var_id = var_id
                     end
-                    local item = AST.node('TupleTypeItem', me.ln,
-                                    false,var_tp,false)
-                    me.tup[#me.tup+1] = item
-                    item.var_id = var_id
                 end
             end
 
@@ -1790,6 +1792,7 @@ type.
                             'field "'..id..'" is not declared')
                 me.tp = var.tp
                 me.lval = var
+me.var = var
                 --BLK, VAR = blk, var
                 -- TODO
             else
