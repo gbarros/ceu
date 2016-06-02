@@ -344,9 +344,12 @@ local function f (ln, v1, op, v2, v3, ...)
     return ret
 end
 
-for i=1, 12 do
-    local tag = '__'..i
-    GG[tag] = (m.Cp()/i2l) * GG[tag] / f
+local t = { '', '_Num', '_Bool', '_Lval' }
+for _, suf in ipairs(t) do
+    for i=1, 12 do
+        local tag = '__'..i..suf
+        GG[tag] = (m.Cp()/i2l) * GG[tag] / f
+    end
 end
 
 AST.root = m.P(GG):match(OPTS.source)

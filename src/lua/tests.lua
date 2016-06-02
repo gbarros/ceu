@@ -21624,7 +21624,9 @@ Test { [[var int&&p; escape p+10 and 0;]], env='invalid operands to binary' }
 -- ptr
 Test { [[var int a; escape *a;]], env='invalid operand to unary "*"' }
 Test { [[var int a; var int&&pa; (pa+10)=&&a; escape a;]],
-        env='invalid operands to binary'}
+    parser = 'TODO: exp-lval',
+    --env='invalid operands to binary'
+}
 Test { [[var int a; var int&&pa; a=1; pa=&&a; *pa=3; escape a;]], run=3 }
 
 Test { [[
@@ -22793,7 +22795,8 @@ vector[10] u8 vec = [1,2,3];
 $$vec = 0;
 escape vec[0];
 ]],
-    env = 'line 2 : invalid attribution',
+    parser = 'TODO: exp-lval',
+    --env = 'line 2 : invalid attribution',
 }
 Test { [[
 vector[10] u8 vec = [1,2,3];
