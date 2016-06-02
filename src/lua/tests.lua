@@ -1475,7 +1475,8 @@ Test { [[await 1; escape 0;]],
     parser = 'line 1 : after `1´ : expected <h,min,s,ms,us>',
 }
 Test { [[await -1; escape 0;]],
-    env = 'line 1 : event "?" is not declared',
+    parser = 'TODO: exp-field',
+    --env = 'line 1 : event "?" is not declared',
 }
 
 Test { [[var s32 a=await 10s; escape a==8000000;]],
@@ -2562,7 +2563,8 @@ loop i in 10 do
 end
 escape 1;
 ]],
-    env = 'TODO: not a pool',
+    parser = 'TODO: exp-field',
+    --env = 'TODO: not a pool',
 }
 
 Test { [[
@@ -16859,7 +16861,7 @@ Test { [[
 event void e;
 var int v = 1;
 var int&& x = &&v;
-loop i in *x do
+loop i in [0->*x[ do
     await 1s;
 end
 escape v;
@@ -23448,6 +23450,13 @@ escape r1+r2;
     run = 10,
 }
 
+Test { [[
+vector[1] vs = [0,0];
+vs[true as int] = 1;
+escape vs[1];
+]],
+    run = 1,
+}
 --<<< VECTORS / STRINGS
 
 Test { [[
