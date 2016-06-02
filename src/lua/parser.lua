@@ -403,7 +403,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
                     (V'__awaits'-I(V'Await_Code')) *
                 V'__Do'
 
-    , CallStmt = V'__Exp'
+    , CallStmt = V'__Exp_Call'
 
     , Finalize = K'do' *
                     V'Block' *
@@ -782,6 +782,26 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 -- Expressions
 -------------------------------------------------------------------------------
 
+-- CALL
+
+    , __Exp_Call  = V'__1_Call'
+    , __1_Call    = V'__2_Call'
+    , __2_Call    = V'__3_Call'
+    , __3_Call    = V'__4_Call'
+    , __4_Call    = V'__5_Call'
+    , __5_Call    = V'__6_Call'
+    , __6_Call    = V'__7_Call'
+    , __7_Call    = V'__8_Call'
+    , __8_Call    = V'__9_Call'
+    , __9_Call    = V'__10_Call'
+    , __10_Call   = V'__11_Call'
+    , __11_Call   = V'__12_Lval' * PARENS(Cc'call' * OPT(V'Explist'))
+                  + V'__12_Call'
+    , __12_Call   = PARENS(V'__Exp_Call')
+                  + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
+                  + CK'call'           * V'__Exp_Call'
+                  + CK'call/recursive' * V'__Exp_Call'
+
 -- LVAL
 
     , __Exp_Lval  = V'__1_Lval'
@@ -827,22 +847,19 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , __9_Bool    = V'__10_Bool'
     , __10_Bool   = (Cc(false) * CK'not')^0 * V'__11_Bool'
                   + (Cc(false) * CKK'*')^1  * V'__11'
-    , __11_Bool   = V'__12_Lval' *
-                  (
-                      PARENS(Cc'call' * OPT(V'Explist'))
-                  +
+    , __11_Bool   = V'__12_Lval' * PARENS(Cc'call' * OPT(V'Explist'))
+                  + V'__12_Lval' * CKK'?'
+                  + V'__12_Lval' * (
                       KK'[' * Cc'idx'  * V'__Exp_Num'    * KK']' +
                       (CKK':' + (CKK'.'-'..')) * (V'__ID_int'+V'__ID_nat') +
-                      CKK'?' + (CKK'!'-'!=')
+                      (CKK'!'-'!=')
                   )^1
                   + V'__12_Bool'
     , __12_Bool   = PARENS(V'__Exp_Bool')
-                  + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
+                  + V'__12_Call'
                   + V'ID_int' + V'ID_nat'
                   + V'BOOLEAN'
                   + V'Nat_Exp'
-                  + CK'call'           * V'__Exp'
-                  + CK'call/recursive' * V'__Exp'
 
 -- NUM
 
@@ -868,13 +885,11 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
                   )^1
                   + V'__12_Num'
     , __12_Num   = PARENS(V'__Exp_Num')
+                 + V'__12_Call'
                  + V'SIZEOF'
-                 + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
                  + V'ID_int'  + V'ID_nat'
                  + V'NUMBER'
                  + V'Nat_Exp'
-                 + CK'call'           * V'__Exp'
-                 + CK'call/recursive' * V'__Exp'
 
 -- EXP
 

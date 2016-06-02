@@ -303,7 +303,8 @@ Test { [[
 inputintMY_EVT;
 escape 1;
 ]],
-    locs = 'line 1 : internal identifier "inputintMY_EVT" is not declared',
+    parser = 'TODO: exp-call',
+    --locs = 'line 1 : internal identifier "inputintMY_EVT" is not declared',
 }
 
 Test { [[
@@ -45503,7 +45504,8 @@ escape Fx(5);
 Test { [[
 call 1;
 ]],
-    ast = 'line 1 : invalid call',
+    parser = 'TODO: set-call',
+    --ast = 'line 1 : invalid call',
     --env = 'TODO: 1 not func',
     --parser = 'line 1 : after `1´ : expected <h,min,s,ms,us>',
 }
