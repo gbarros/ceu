@@ -1,7 +1,7 @@
 local P, C, V, S, Cc, Ct = m.P, m.C, m.V, m.S, m.Cc, m.Ct
 
 --[[
-local VV = V
+local _V = V
 local spc = 0
 V = function (id)
     return
@@ -12,7 +12,7 @@ V = function (id)
                 return true
             end)
         * (
-            VV(id) * m.Cmt(P'',
+            _V(id) * m.Cmt(P'',
                         function ()
                             spc = spc - 2
                             DBG(string.rep(' ',spc)..'+++', id)
@@ -128,7 +128,7 @@ local function ERR ()
               ' : expected '..translate(table.concat(ERR_strs,' or '))
 end
 
-local function fail (i, err)
+local function tk_fail (i, err)
     if err == true then
         return false
     end
@@ -165,7 +165,7 @@ local function KK (patt, err, nox)
                     -- FAILURE
                     function (_,i)
                         if IGN>0 then return false end
-                        return fail(i,err)
+                        return tk_fail(i,err)
                     end) * P(false)
                            -- (avoids "left recursive" error (explicit fail))
 
@@ -208,9 +208,48 @@ end
 local E = function (msg)
     return m.Cmt(P'',
             function (_,i)
-                return fail(i,msg)
+                return tk_fail(i,msg)
             end)
 end
+
+--[[
+local function v_fail (i, err, idx, dbg)
+    if i==ERR_i and (not ERR_strs[err]) then
+        for i=#ERR_strs, idx, -1 do
+            local err2 = ERR_strs[i]
+            ERR_strs[i]    = nil
+            ERR_strs[err2] = nil
+        end
+        ERR_strs[#ERR_strs+1] = err
+        ERR_strs[err] = true
+    end
+    return false
+end
+
+local _V = V
+local function V (rule, err)
+    local patt = _V(rule)
+-- DBG
+--err = true
+    if not err then
+        return patt
+    end
+    local idx
+    return m.Cmt(P'', function ()
+                        idx = #ERR_strs+1
+                        return true
+                      end)
+            * patt
+               + m.Cmt(P'',
+                    -- FAILURE
+                    function (_,i)
+                        if IGN>0 then return false end
+-- DBG
+                        return v_fail(i, err, idx, err==true and rule)
+                    end) * P(false)
+                           -- (avoids "left recursive" error (explicit fail))
+end
+]]
 
 -->>> OK
 TYPES = P'bool' + 'byte'
@@ -560,11 +599,11 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
 -- SETS
 
-    , _Set_one   = V'__Exp'           * V'__Sets_one'
+    , _Set_one   = V'__Exp_Lval'      * V('__Sets_one')
     , _Set_many  = PARENS(V'Varlist') * V'__Sets_many'
 
-    , __Sets_one  = (CKK'='+CKK':=') * (V'__sets_one'  + PARENS(V'__sets_one'))
-    , __Sets_many = (CKK'='+CKK':=') * (V'__sets_many' + PARENS(V'__sets_many'))
+    , __Sets_one  = ((CKK'='+CKK':=')-'==') * (V'__sets_one'  + PARENS(V'__sets_one'))
+    , __Sets_many = ((CKK'='+CKK':=')-'==') * (V'__sets_many' + PARENS(V'__sets_many'))
 
     , __sets_one =
           V'_Set_Data'
@@ -745,15 +784,15 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
 -- BOOL
 
-    , __Exp_Bool  = V'__1_Bool'
-    , __1_Bool    = V'__2_Bool'  * (CK'or'  * V'__2_Bool')^0
-    , __2_Bool    = V'__3_Bool'  * (CK'and' * V'__3_Bool')^0
-    , __3_Bool    = V'__4'  * ( ( (CKK'!='-'!==')+CKK'=='+CKK'<='+CKK'>='
-                           + (CKK'<'-'<<')+(CKK'>'-'>>')
-                           ) * V'__4'
-                         + CK'is' * V'Type'
-                         + CK'as' * #K'bool'*V'__Cast'
-                         )^1
+    , __Exp_Bool  = V('__1_Bool','boolean expression')
+    , __1_Bool    = V'__2_Bool' * (CK'or'  * V'__2_Bool')^0
+    , __2_Bool    = V'__3_Bool' * (CK'and' * V'__3_Bool')^0
+    , __3_Bool    = V'__4' * ( ( (CKK'!='-'!==')+CKK'=='+CKK'<='+CKK'>='
+                               + (CKK'<'-'<<')+(CKK'>'-'>>')
+                               ) * V'__4'
+                             + CK'is' * V'Type'
+                             + CK'as' * #K'bool'*V'__Cast'
+                             )^1
                   + V'__4_Bool'
     , __4_Bool    = V'__5_Bool'
     , __5_Bool    = V'__6_Bool'
@@ -761,9 +800,9 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , __7_Bool    = V'__8_Bool'
     , __8_Bool    = V'__9_Bool'
     , __9_Bool    = V'__10_Bool'
-    , __10_Bool   = ( Cc(false) * CK'not')^0 * V'__11_Bool'
-                  + ( Cc(false) * CKK'*')^1  * V'__11'
-    , __11_Bool   = V'__12' *
+    , __10_Bool   = (Cc(false) * CK'not')^0 * V'__11_Bool'
+                  + (Cc(false) * CKK'*')^1  * V'__11'
+    , __11_Bool   = V'__12_Lval' *
                   (
                       PARENS(Cc'call' * OPT(V'Explist'))
                   +
@@ -779,6 +818,31 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
                   + V'Nat_Exp'
                   + CK'call'           * V'__Exp'
                   + CK'call/recursive' * V'__Exp'
+
+-- LVAL
+
+    , __Exp_Lval  = V'__1_Lval'
+    , __1_Lval    = V'__2_Lval'
+    , __2_Lval    = V'__3_Lval'
+    , __3_Lval    = V'__4_Lval'
+    , __4_Lval    = V'__5_Lval'
+    , __5_Lval    = V'__6_Lval'
+    , __6_Lval    = V'__7_Lval'
+    , __7_Lval    = V'__8_Lval'
+    , __8_Lval    = V'__9_Lval'
+    , __9_Lval    = V'__10_Lval'
+    , __10_Lval   = (Cc(false) * CKK'*')^1 * V'__11'
+                  + (Cc(false) * (CKK'$$' + (CKK'$'-'$$')))^0 * V'__11_Lval'
+    , __11_Lval   = V'__12_Lval' *
+                  (
+                      KK'[' * Cc'idx'  * V'__Exp'    * KK']' +
+                      (CKK':' + (CKK'.'-'..')) * (V'__ID_int'+V'__ID_nat') +
+                      (CKK'!'-'!=')
+                  )^0
+    , __12_Lval   = PARENS(V'__Exp')
+                  + V'ID_int'  + V'ID_nat'
+                  + V'Global'  + V'This'   + V'Outer'
+                  + V'Nat_Exp'
 
 -- EXP
 
@@ -814,7 +878,6 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , __Prim = PARENS(V'__Exp')
              + V'SIZEOF'
              + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
--- Field
              + V'ID_int'  + V'ID_nat'
              + V'NULL'    + V'NUMBER' + V'BOOLEAN' + V'STRING'
              + V'Global'  + V'This'   + V'Outer'

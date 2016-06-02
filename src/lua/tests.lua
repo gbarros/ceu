@@ -97,10 +97,10 @@ Test { [[escape (1<=2) + (1<2) + 2/1 - 2%3;]], run=2 }
 -- TODO: linux gcc only?
 --Test { [[escape (~(~0b1010 & 0XF) | 0b0011 ^ 0B0010) & 0xF;]], run=11 }
 Test { [[nt a;]],
-    parser = "line 1 : after `nt´ : expected `(´ or `[´ or `:´ or `.´ or `?´ or `!´ or binary operator or `=´ or `:=´ or `;´",
+    parser = 'line 1 : after `nt´ : expected `[´ or `:´ or `.´ or `!´ or `=´ or `:=´ or `;´',
 }
 Test { [[nt sizeof;]],
-    parser = "line 1 : after `nt´ : expected `(´ or `[´ or `:´ or `.´ or `?´ or `!´ or binary operator or `=´ or `:=´ or `;´",
+    parser = 'line 1 : after `nt´ : expected `[´ or `:´ or `.´ or `!´ or `=´ or `:=´ or `;´',
 }
 Test { [[var int sizeof;]],
     parser = "line 1 : after `int´ : expected type modifier or internal identifier",
@@ -157,6 +157,17 @@ Test { [[var int a=0;]],
         reachs = 1,
         isForever = true,
     }
+}
+
+Test { [[
+1 = 1;
+]],
+    parser = 'TODO: exp-lval',
+}
+Test { [[
+_f() = 1;
+]],
+    parser = 'TODO: exp-lval',
 }
 
 Test { [[
@@ -284,7 +295,8 @@ Test { [[
 inputintMY_EVT;
 ifv==0thenbreak;end
 ]],
-    parser = 'line 2 : after `==´ : expected expression',
+    --parser = 'line 2 : after `==´ : expected expression',
+    parser = 'line 2 : after `ifv´ : expected `[´ or `:´ or `.´ or `!´ or `;´',
     --parser = 'line 2 : after `0´ : expected `(´ or `[´ or `:´ or `.´ or `?´ or `!´ or binary operator or `=´ or `:=´ or `;´',
 }
 Test { [[
@@ -307,7 +319,8 @@ Test { [[
 native_printf();
 loopdo await250ms;_printf("Hello World!\n");end
 ]],
-    parser = 'line 2 : after `loopdo´ : expected `(´ or `[´ or `:´ or `.´ or `?´ or `!´ or binary operator or `=´ or `:=´ or `;´',
+    parser = 'line 2 : after `loopdo´ : expected `[´ or `:´ or `.´ or `!´ or `=´ or `:=´ or `;´',
+    --parser = 'line 2 : after `loopdo´ : expected `(´ or `[´ or `:´ or `.´ or `?´ or `!´ or binary operator or `=´ or `:=´ or `;´',
 }
 
 -- TYPE / BOOL
@@ -814,7 +827,7 @@ escape 1;
     -- IF
 
 Test { [[if 1 then escape 1; end; escape 0;]],
-    todo = 'TODO: exp-bool',
+    parser = 'TODO: exp-bool',
     _ana = {
         isForever = false,
     },
