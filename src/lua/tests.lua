@@ -2566,7 +2566,7 @@ escape 1;
 
 Test { [[
 var int ret = 0;
-loop i in [0 |> 256-1[ do
+loop i in [0 -> 256-1[ do
     ret = ret + 1;
 end
 escape ret;
@@ -2576,7 +2576,7 @@ escape ret;
 
 Test { [[
 var int ret = 0;
-loop i in [1 |> 4] do
+loop i in [1 -> 4] do
     ret = ret + i;
 end
 escape ret;
@@ -2586,7 +2586,7 @@ escape ret;
 
 Test { [[
 var int ret = 0;
-loop i in [1|>4], 2 do
+loop i in [1->4], 2 do
     ret = ret + i;
 end
 escape ret;
@@ -2596,7 +2596,7 @@ escape ret;
 
 Test { [[
 var int ret = 0;
-loop i in [1|>4], -2 do
+loop i in [1->4], -2 do
     ret = ret + i;
 end
 escape ret;
@@ -2606,7 +2606,7 @@ escape ret;
 
 Test { [[
 var int ret = 1;
-loop i in [4|>1] do
+loop i in [4->1] do
     ret = ret + i;
 end
 escape ret;
@@ -2616,7 +2616,7 @@ escape ret;
 
 Test { [[
 var int ret = 1;
-loop i in ]-3|>3[ do
+loop i in ]-3->3[ do
     ret = ret + i;
 end
 escape ret;
@@ -2626,7 +2626,7 @@ escape ret;
 
 Test { [[
 var int sum = 0;
-loop i in [_|>0] do
+loop i in [_->0] do
     if i == 10 then
         break;
     end
@@ -2634,11 +2634,11 @@ loop i in [_|>0] do
 end
 escape sum;
 ]],
-    parser = 'line 2 : after `_´ : expected `<|´',
+    parser = 'line 2 : after `_´ : expected `<-´',
 }
 Test { [[
 var int sum = 0;
-loop i in [0<|_] do
+loop i in [0<-_] do
     if i == 10 then
         break;
     end
@@ -2646,12 +2646,12 @@ loop i in [0<|_] do
 end
 escape sum;
 ]],
-    parser = 'line 2 : after `<|´ : expected expression',
+    parser = 'line 2 : after `<-´ : expected expression',
 }
 
 Test { [[
 var int sum = 0;
-loop i in [0|>_] do
+loop i in [0->_] do
     if i == 10 then
         break;
     end
@@ -2666,7 +2666,7 @@ escape sum;
 
 Test { [[
 var int ret = 0;
-loop i in [1 <| 4] do
+loop i in [1 <- 4] do
     ret = ret + i;
 end
 escape ret;
@@ -2676,7 +2676,7 @@ escape ret;
 
 Test { [[
 var int ret = 0;
-loop i in [1<|4], 1 do
+loop i in [1<-4], 1 do
     ret = ret + i;
 end
 escape ret;
@@ -2686,7 +2686,7 @@ escape ret;
 
 Test { [[
 var int ret = 0;
-loop i in [1<|4], 2 do
+loop i in [1<-4], 2 do
     ret = ret + i;
 end
 escape ret;
@@ -2695,7 +2695,7 @@ escape ret;
 }
 Test { [[
 var int ret = 1;
-loop i in [4<|1] do
+loop i in [4<-1] do
     ret = ret + i;
 end
 escape ret;
@@ -2705,7 +2705,7 @@ escape ret;
 
 Test { [[
 var int ret = 1;
-loop i in ]-3 <| 3] do
+loop i in ]-3 <- 3] do
     ret = ret + i;
 end
 escape ret;
@@ -2715,7 +2715,7 @@ escape ret;
 
 Test { [[
 var int ret = 1;
-loop i in [-10 <| -3[ do
+loop i in [-10 <- -3[ do
     ret = ret + i;
 end
 escape ret;
@@ -2725,7 +2725,7 @@ escape ret;
 
 Test { [[
 var int sum = 0;
-loop i in [_<|0] do
+loop i in [_<-0] do
     if i == -10 then
         break;
     end
@@ -2739,7 +2739,7 @@ escape sum;
 }
 
 Test { [[
-loop i in [-1 <| 0] do
+loop i in [-1 <- 0] do
 end
 escape 1;
 ]],
@@ -2750,7 +2750,7 @@ escape 1;
 Test { [[
 var int n = 10;
 var int sum = 0;
-loop i in [0|>n[ do
+loop i in [0->n[ do
     sum = sum + 1;
 end
 escape n;
@@ -3027,7 +3027,7 @@ end;
 }
 
 Test { [[
-loop i in [0 |> -1] do
+loop i in [0 -> -1] do
 end
 escape 1;
 ]],
@@ -3037,7 +3037,7 @@ escape 1;
     -- TODO: with sval -1 would be constant
 }
 Test { [[
-loop i in [0 |> 0] do
+loop i in [0 -> 0] do
 end
 escape 1;
 ]],
@@ -3058,7 +3058,7 @@ end
 Test { [[
 input void A;
 loop do
-    loop i in [0|>1[ do
+    loop i in [0->1[ do
         await A;
     end
 end
@@ -3070,7 +3070,7 @@ Test { [[
 input void OS_START;
 var int v = 1;
 loop do
-    loop i in [0|>v[ do
+    loop i in [0->v[ do
         await OS_START;
         escape 2;
     end
@@ -3086,7 +3086,7 @@ Test { [[
 input void OS_START;
 var int v = 1;
 loop do
-    loop i in [0|>v[ do
+    loop i in [0->v[ do
         await OS_START;
         escape 2;
     end
@@ -3154,7 +3154,7 @@ escape 1;
 }
 
 Test { [[
-loop/10000000 i in [0|>0[ do
+loop/10000000 i in [0->0[ do
 end
 escape 1;
 ]],
@@ -3171,7 +3171,7 @@ escape ret;
 }
 
 Test { [[
-loop/10 i in [0|>10[ do
+loop/10 i in [0->10[ do
 end
 escape 1;
 ]],
@@ -3201,7 +3201,7 @@ end
 
 var int ret = 0;
 var int lim = 10 + 10 + _A + A;
-loop/(10+10+_A+A) i in [0|>lim[ do
+loop/(10+10+_A+A) i in [0->lim[ do
     ret = ret + 1;
 end
 escape ret;
@@ -3212,7 +3212,7 @@ escape ret;
 Test { [[
 native _printf;
 var int k = 5;
-loop/1 i in [0|>k[ do
+loop/1 i in [0->k[ do
     var int x = i + 2;
     _printf("%d\n", x);
 end
@@ -3224,7 +3224,7 @@ escape 1;
 Test { [[
 native _printf;
 var int k = 5;
-loop/10 i in [0|>k[ do
+loop/10 i in [0->k[ do
     var int x = i + 2;
     _printf("%d\n", x);
 end
@@ -3237,7 +3237,7 @@ Test { [[
 input void OS_START;
 event void e;
 every OS_START do
-    loop i in [0|>10[ do
+    loop i in [0->10[ do
         emit e;
     end
     do break; end
@@ -3252,7 +3252,7 @@ input void OS_START;
 event void e;
 loop do
     await OS_START;
-    loop i in [0|>10[ do
+    loop i in [0->10[ do
         emit e;
     end
     do break; end
@@ -3810,7 +3810,7 @@ end
 
 Test { [[
 var int ret = 1;
-loop i in [0|>10[ do
+loop i in [0->10[ do
     if true then
         continue;
     end
@@ -3873,7 +3873,7 @@ end
 
 Test { [[
 var int ret = 0;
-loop i in [0|>10[ do
+loop i in [0->10[ do
     if i%2 == 0 then
         ret = ret + 1;
         await 1s;
@@ -3920,7 +3920,7 @@ escape 1;
 
 Test { [[
 var int x = 0;
-loop i in [0|>10[ do
+loop i in [0->10[ do
     x = x + 1;
     par/and do
         await FOREVER;
@@ -3935,8 +3935,8 @@ escape x;
 
 Test { [[
 var int x = 0;
-loop i in [0|>10[ do
-    loop j in [0|>10[ do
+loop i in [0->10[ do
+    loop j in [0->10[ do
         x = x + 1;
         par/and do
             await FOREVER;
@@ -3952,8 +3952,8 @@ escape x;
 
 Test { [[
 var int x = 0;
-loop i in [0|>10[ do
-    loop j in [0|>10[ do
+loop i in [0->10[ do
+    loop j in [0->10[ do
         x = x + 1;
         par/and do
             await FOREVER;
@@ -3969,7 +3969,7 @@ escape x;
 
 Test { [[
 var int x = 0;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     x = x + 1;
     par/and do
         await FOREVER;
@@ -3984,8 +3984,8 @@ escape x;
 
 Test { [[
 var int x = 0;
-loop i in [0|>10[ do
-    loop j in [0|>10[ do
+loop i in [0->10[ do
+    loop j in [0->10[ do
         x = x + 1;
         par/and do
             await FOREVER;
@@ -4001,8 +4001,8 @@ escape x;
 
 Test { [[
 var int x = 0;
-loop i in [0|>10[ do
-    loop j in [0|>10[ do
+loop i in [0->10[ do
+    loop j in [0->10[ do
         x = x + 1;
         par/and do
             await FOREVER;
@@ -4349,7 +4349,7 @@ Test { [[
 input int A;
 var int sum = 0;
 par/or do
-    loop i in [0|>1+1[ do
+    loop i in [0->1+1[ do
         await A;
     end
     sum = 0;
@@ -4370,7 +4370,7 @@ Test { [[
 input int A;
 var int sum = 0;
 par/or do
-    loop i in [0|>1[ do    // 4
+    loop i in [0->1[ do    // 4
         await A;
     end
     sum = 0;
@@ -4391,7 +4391,7 @@ input void A;
 var int sum = 0;
 var int ret = 0;
 par/or do
-    loop i in [0|>2[ do
+    loop i in [0->2[ do
         await A;
         ret = ret + 1;
     end
@@ -4415,7 +4415,7 @@ input void A;
 var int sum = 0;
 var int ret = 0;
 par/or do
-    loop i in [0|>3[ do
+    loop i in [0->3[ do
         await A;
         ret = ret + 1;
     end
@@ -4439,7 +4439,7 @@ Test { [[
 input int A;
 var int sum = 0;
 par/or do
-    loop i in [0|>1[ do    // 4
+    loop i in [0->1[ do    // 4
         await A;
         async do
             var int a = 1;
@@ -4464,7 +4464,7 @@ input int A;
 var int sum = 0;
 par/or do
     sum = 5;            // 4
-    loop i in [0|>10[ do       // 5
+    loop i in [0->10[ do       // 5
         await A;
         async do
             var int a = 1;
@@ -4473,7 +4473,7 @@ par/or do
     end
     sum = 0;            // 11
 with
-    loop i in [0 |> 2[ do        // 13
+    loop i in [0 -> 2[ do        // 13
         async do
             var int a = 1;
             if a then end
@@ -4491,7 +4491,7 @@ input int A;
 var int sum = 0;
 par/or do
     sum = 5;            // 4
-    loop i in [0 |> 10[ do       // 5
+    loop i in [0 -> 10[ do       // 5
         await A;
         async do
             var int a = 1;
@@ -4500,7 +4500,7 @@ par/or do
     end
     sum = 0;            // 11
 with
-    loop i in [0 |> 2[ do        // 13
+    loop i in [0 -> 2[ do        // 13
         async do
             var int a = 1;
             if a then end
@@ -4519,7 +4519,7 @@ escape sum;
 
 Test { [[
 var int sum = 0;
-loop i in [0 |> 100[ do
+loop i in [0 -> 100[ do
     sum = sum + (i+1);
 end
 escape sum;
@@ -4541,7 +4541,7 @@ escape sum;
 }
 Test { [[
 var int sum = 5050;
-loop i in [0 |> 100[ do
+loop i in [0 -> 100[ do
     sum = sum - (i+1);
 end
 escape sum;
@@ -4552,7 +4552,7 @@ escape sum;
 Test { [[
 var int sum = 5050;
 var int v = 0;
-loop i in [0 |> 100[ do
+loop i in [0 -> 100[ do
     v = i;
     if sum == 100 then
         break;
@@ -4568,7 +4568,7 @@ Test { [[
 input void A;
 var int sum = 0;
 var int v = 0;
-loop i in [0 |> 101[ do
+loop i in [0 -> 101[ do
     v = i;
     if sum == 6 then
         break;
@@ -4582,7 +4582,7 @@ escape v;
 }
 Test { [[
 var int sum = 4;
-loop i in [0 |> 0[ do
+loop i in [0 -> 0[ do
     sum = sum - i;
 end
 escape sum;
@@ -4594,7 +4594,7 @@ escape sum;
 Test { [[
 input void A;
 var int sum = 0;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     await A;
     sum = sum + 1;
 end
@@ -5170,7 +5170,7 @@ end
 
 Test { [[
 event void e;
-loop i in [0 |> 1000[ do
+loop i in [0 -> 1000[ do
     emit e;
 end
 escape 1;
@@ -5185,7 +5185,7 @@ par/or do
         ret = ret + 1;
     end
 with
-    loop i in [0 |> 2[ do
+    loop i in [0 -> 2[ do
         emit e;
     end
 end
@@ -5203,7 +5203,7 @@ par/or do
         ret = ret + 1;
     end
 with
-    loop i in [0 |> 1000[ do
+    loop i in [0 -> 1000[ do
         emit e;
     end
 end
@@ -16832,7 +16832,7 @@ escape 1;
 Test { [[
 var int v = 1;
 var int&& x = &&v;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     *x = *x + 1;
     await 1s;
 end
@@ -16845,7 +16845,7 @@ Test { [[
 event void e;
 var int v = 1;
 var int&& x = &&v;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     *x = *x + 1;
     emit e;
 end
@@ -20498,7 +20498,7 @@ with
     par/and do
         var int v = async do
             var int v;
-            loop i in [0 |> 5[ do
+            loop i in [0 -> 5[ do
                 v = v + i;
             end
             escape v;
@@ -20507,7 +20507,7 @@ with
     with
         var int v = async do
             var int v;
-            loop i in [0 |> 5[ do
+            loop i in [0 -> 5[ do
                 v = v + i;
             end
             escape v;
@@ -21529,7 +21529,7 @@ input void OS_START;
 event void e;
 loop do
     await OS_START;
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         emit e;
     end
     do break; end
@@ -22985,7 +22985,7 @@ escape bs[i];
 Test { [[
 vector[5] u8 foo = [1, 2, 3, 4, 5];
 var int tot = 0;
-loop i in [0 |> $foo[ do
+loop i in [0 -> $foo[ do
     tot = tot + foo[i];
 end
 escape tot;
@@ -22995,7 +22995,7 @@ escape tot;
 Test { [[
 vector[5] u8 foo = [1, 2, 3, 4, 5];
 var int tot = 0;
-loop i in [0 |> $foo[ do
+loop i in [0 -> $foo[ do
     tot = tot + foo[i];
 end
 escape tot;
@@ -23008,7 +23008,7 @@ escape tot;
 Test { [[
 vector[5] u8 foo = [1, 2, 3, 4, 5];
 var int tot = 0;
-loop i in [0 |> $$foo[ do
+loop i in [0 -> $$foo[ do
     tot = tot + foo[i];
 end
 escape tot;
@@ -23019,7 +23019,7 @@ escape tot;
 Test { [[
 vector[] u8 foo = [1, 2, 3, 4, 5];
 var int tot = 0;
-loop i in [0 |> $$foo[ do
+loop i in [0 -> $$foo[ do
     tot = tot + foo[i];
 end
 escape tot+1;
@@ -23083,7 +23083,7 @@ vector[] int v1 = [1,2,3];
 vector[] int v2 = [7,8,9];
 v1 = [] .. v1 .. [4,5,6] .. v2;
 var int ret = 0;
-loop i in [0 |> 9[ do
+loop i in [0 -> 9[ do
     ret = ret + v1[i];
 end
 escape ret;
@@ -25418,13 +25418,13 @@ native _u8;
 var _u8[10] v1 = [];
 var _char[10] v2 = [];
 
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     v1[i] = i;
     v2[i] = ((i*2) as _char);
 end
 
 var int ret = 0;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     ret = ret + (v2[i] as u8) - v1[i];
 end
 
@@ -25849,11 +25849,11 @@ pre native do
 end
 native _int;
 var _int[_N] vec = [];
-loop i in [0 |> _N[ do
+loop i in [0 -> _N[ do
     vec[i] = i;
 end
 var int ret = 0;
-loop i in [0 |> _N[ do
+loop i in [0 -> _N[ do
     ret = ret + vec[i];
 end
 escape ret;
@@ -26330,7 +26330,7 @@ Test { [[
 event bool in_tm;
 pause/if in_tm do
     async do
-        loop i in [0 |> 5[ do
+        loop i in [0 -> 5[ do
         end
     end
 end
@@ -26387,7 +26387,7 @@ end
 -- TIGHT LOOPS
 
 Test { [[
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     i = 0;
 end
 ]],
@@ -26405,14 +26405,14 @@ loop i do end
     tight = 'line 1 : tight loop',
 }
 Test { [[
-loop i in [0 |> 10[ do end
+loop i in [0 -> 10[ do end
 escape 2;
 ]],
     run = 2,
 }
 Test { [[
 var int v=1;
-loop i in [0|>v[ do end
+loop i in [0->v[ do end
 ]],
     tight = 'line 2 : tight loop',
 }
@@ -26740,7 +26740,7 @@ escape ret;
 
 Test { [[
 var int a = _;
-loop _ in [0|>10[ do
+loop _ in [0->10[ do
 end
 
 do/_
@@ -27091,8 +27091,8 @@ var& int p2 = &v2;
 par/and do
     async/thread (p1) do
         var int ret = 0;
-        loop i in [0 |> 10[ do
-            loop j in [0 |> 10[ do
+        loop i in [0 -> 10[ do
+            loop j in [0 -> 10[ do
                 ret = ret + i + j;
             end
         end
@@ -27103,8 +27103,8 @@ par/and do
 with
     async/thread (p2) do
         var int ret = 0;
-        loop i in [0 |> 10[ do
-            loop j in [0 |> 10[ do
+        loop i in [0 -> 10[ do
+            loop j in [0 -> 10[ do
                 ret = ret + i + j;
             end
         end
@@ -27172,8 +27172,8 @@ var& int p2 = &v2;
 par/and do
     async/thread (p1) do
         var int ret = 0;
-        loop i in [0 |> 50000[ do
-            loop j in [0 |> 50000[ do
+        loop i in [0 -> 50000[ do
+            loop j in [0 -> 50000[ do
                 ret = ret + i + j;
             end
         end
@@ -27184,8 +27184,8 @@ par/and do
 with
     async/thread (p2) do
         var int ret = 0;
-        loop i in [0 |> 50000[ do
-            loop j in [0 |> 50000[ do
+        loop i in [0 -> 50000[ do
+            loop j in [0 -> 50000[ do
                 ret = ret + i + j;
             end
         end
@@ -27215,14 +27215,14 @@ pre native do
 end
 par/or do
     async do
-        loop i in [0 |> 3[ do
+        loop i in [0 -> 3[ do
 native _usleep;
             _usleep(500);
         end
     end
 with
     async/thread do
-        loop i in [0 |> 2[ do
+        loop i in [0 -> 2[ do
 native _V;
             _V = _V + 1;
             _usleep(500);
@@ -27858,7 +27858,7 @@ escape ret;
 Test { [=[
     async/thread do
     end
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 1s;
     end
     escape 1;
@@ -29852,7 +29852,7 @@ do
     loop do
         watching evtA do
             loop do
-                loop i in [0 |> 3[ do
+                loop i in [0 -> 3[ do
                     await 1s;
                 end
                 emit evtB;
@@ -30254,7 +30254,7 @@ end
 var Tx a;
 await OS_START;
 par/or do
-    loop i in [0 |> 3[ do
+    loop i in [0 -> 3[ do
         par/and do
             emit a.go;
         with
@@ -30286,7 +30286,7 @@ end
 var Tx a;
 await OS_START;
 par/or do
-    loop i in [0 |> 3[ do
+    loop i in [0 -> 3[ do
         par/and do
             await a.e;
             v = v + 1;
@@ -30330,7 +30330,7 @@ end
 await OS_START;
 var Tx a;
 par/or do
-    loop i in [0 |> 3[ do
+    loop i in [0 -> 3[ do
         await a.e;
         v = v + 1;
     end
@@ -30356,7 +30356,7 @@ do
 end
 var Tx a;
 await OS_START;
-loop i in [0 |> 3[ do
+loop i in [0 -> 3[ do
     await a.e;
     v = v + 1;
 end
@@ -33952,7 +33952,7 @@ var int ret = 0;
 class Tx with do end;
 par/or do
     every x do
-        loop i in [0 |> 1000[ do
+        loop i in [0 -> 1000[ do
             emit e;
         end
     end
@@ -34456,7 +34456,7 @@ end
 var Tx&&? ok;
 native _assert;
 do
-    loop i in [0 |> 5[ do
+    loop i in [0 -> 5[ do
         ok = spawn Tx;
     end
 end
@@ -34474,7 +34474,7 @@ var Tx&&? ok;
 var bool ok_=false;
 native _assert;
 do
-    loop i in [0 |> 5[ do
+    loop i in [0 -> 5[ do
         ok = spawn Tx;
         ok_ = (ok?);
     end
@@ -34493,7 +34493,7 @@ var Tx&&? ok;
 var bool ok_=true;
 native _assert;
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         ok = spawn Tx;
     end
     var Tx&&? ok1 = spawn Tx;
@@ -34511,7 +34511,7 @@ end
 var Tx&&? ok;
 native _assert;
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         ok = spawn Tx;
     end
     ok = spawn Tx;
@@ -35560,10 +35560,10 @@ do
 end
 pool[1] Tx ts;
 do
-    loop i in [0 |> 2[ do
+    loop i in [0 -> 2[ do
         spawn Tx in ts;
     end
-    loop i in [0 |> 2[ do
+    loop i in [0 -> 2[ do
         spawn Tx;
     end
 end
@@ -35582,10 +35582,10 @@ do
 end
 pool[1] Tx ts;
 do
-    loop i in [0 |> 2[ do
+    loop i in [0 -> 2[ do
         spawn Tx in ts;
     end
-    loop i in [0 |> 2[ do
+    loop i in [0 -> 2[ do
         spawn Tx;
     end
 end
@@ -35604,7 +35604,7 @@ do
 end
 do
     pool[1] Tx ts;
-    loop i in [0 |> 1000[ do
+    loop i in [0 -> 1000[ do
         var Tx&&? ok = spawn Tx in ts;  // 999 fails
         if (not ok?) then
             escape 0;
@@ -35629,7 +35629,7 @@ do
 end
 pool[1] Tx ts;
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         spawn Tx in ts;
     end
 end
@@ -35650,7 +35650,7 @@ do
 end
 pool[1] Tx ts;
 do
-    loop i in [0 |> 1000[ do
+    loop i in [0 -> 1000[ do
         var Tx&&? ok = spawn Tx in ts;
         if not ok? then
             escape 10;
@@ -38002,7 +38002,7 @@ var Tx&&? ok;
 native do ##include <assert.h> end
 native _assert;
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         ok = spawn Tx;
     end
     _assert(ok?);
@@ -38011,13 +38011,13 @@ do
     _assert(not ok?);
 end
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         ok = spawn Tx;
     end
     _assert(not ok?);
 end
 do
-    loop i in [0 |> 101[ do
+    loop i in [0 -> 101[ do
         ok = spawn Tx;
     end
     _assert(not ok?);
@@ -38036,7 +38036,7 @@ end
 native do ##include <assert.h> end
 native _assert;
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         var Tx&&? ok;
         ok = spawn Tx;
         _assert(ok?);
@@ -38047,14 +38047,14 @@ do
     _assert(not ok2?);
 end
 do
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         var Tx&&? ok;
         ok = spawn Tx;
         _assert(ok?);
     end
 end
 do
-    loop i in [0 |> 101[ do
+    loop i in [0 -> 101[ do
         var Tx&&? ok;
         ok = spawn Tx;
         _assert(i<100 or (not ok?));
@@ -38075,7 +38075,7 @@ native do ##include <assert.h> end
 native _assert;
 do
     pool[] Tx ts;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         var Tx&&? ok;
         ok = spawn Tx in ts;
         _assert(not ok?);
@@ -38087,7 +38087,7 @@ do
 end
 do
     pool[] Tx ts;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         var Tx&&? ok;
         ok = spawn Tx in ts;
         _assert(ok?);
@@ -38095,7 +38095,7 @@ do
 end
 do
     pool[] Tx ts;
-    loop i in [0 |> 101[ do
+    loop i in [0 -> 101[ do
         var Tx&&? ok;
         ok = spawn Tx in ts;
         if i < 100 then
@@ -38129,7 +38129,7 @@ end
 var int v = 0;
 do
     pool[] Tx ts;
-    loop i in [0 |> 200[ do
+    loop i in [0 -> 200[ do
         var Tx&&? ok =
             spawn Tx in ts with
                 this.inc = 1;
@@ -39526,7 +39526,7 @@ end
 
 do
     var Tx&&? ptr;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         if ptr? then
             //free ptr;
         end
@@ -39564,7 +39564,7 @@ end
 do
     pool[] Tx ts;
     var Tx&&? ptr;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         if ptr? then
             //free ptr;
         end
@@ -39601,7 +39601,7 @@ end
 
 do
     var Tx&&? ptr;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         if ptr? then
             //free ptr;
         end
@@ -39767,7 +39767,7 @@ par/or do
 with
     pool[1000] Rect rs;
     every 40ms do
-        loop i in [0 |> 40[ do
+        loop i in [0 -> 40[ do
             n = n + 1;
             spawn Rect in rs;
         end
@@ -39785,7 +39785,7 @@ var void&& ptr;
 class Tx with
 do
 end
-loop i in [0 |> 100000[ do
+loop i in [0 -> 100000[ do
     ptr = spawn Tx;
 end
 escape 10;
@@ -39806,7 +39806,7 @@ class Tx with
 do
     do finalize with
         do
-            loop i in [0 |> 1[ do
+            loop i in [0 -> 1[ do
                 do break; end
             end
             _V = _V + this.v;
@@ -39895,7 +39895,7 @@ do
     par/and do
         await 10ms;
     with
-        loop i in [0 |> 5[ do
+        loop i in [0 -> 5[ do
             if i==2 then
                 break;
             end
@@ -39906,7 +39906,7 @@ do
 end
 
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 1s;
         spawn Tx;
     end
@@ -40020,7 +40020,7 @@ do
 end
 
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p = null;
         spawn Tx with
             this.ptr = p;
@@ -40084,7 +40084,7 @@ native do
 end
 
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p = null;
         spawn Tx with
             this.ptr = p;
@@ -40155,7 +40155,7 @@ native do
 end
 
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p = null;
         spawn Tx with
                 do this.ptr = p;
@@ -40178,7 +40178,7 @@ escape _V;
 Test { [[
 native _s, _V;
     var _s&& p = null;
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p1 = p;
         await 1s;
     end
@@ -40209,7 +40209,7 @@ end
 
 var Tx&&? ui;
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p = null;
         ui = spawn Tx with
             this.ptr = p;
@@ -40245,7 +40245,7 @@ end
 var Tx&&? ui;
 do
     var _s&& p = null;
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         ui = spawn Tx with
                 do this.ptr = p;
             finalize with
@@ -40283,7 +40283,7 @@ native do
 end
 
 do
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         var _s&& p = null;
         var Tx&&? ui = spawn Tx with
                 do this.ptr = p;   // p == ptr
@@ -43654,7 +43654,7 @@ code/instantaneous/recursive Load (var int&& l)=>void do
 
     /*
     var int len = (call LUA_OBJLEN => (l, -1));     // [ apps ]
-    loop i in [0|>len[ do
+    loop i in [0->len[ do
         call LUA_RAWGETI => (l, -1);                // [ apps | apps[i] ]
     end
     */
@@ -43671,7 +43671,7 @@ Test { [[
 escape 1;
 code/instantaneous Fx (var int x)=>int do
     if x then end;
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
     end
     escape 1;
 end
@@ -48383,11 +48383,11 @@ end
 var _int[10] vs = [];
 var int     v = 0;
 
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     vs[i] = i;
 end
 var int ret = 0;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     ret = ret + global:vs[i] + global:v;
 end
 escape ret;
@@ -49599,7 +49599,7 @@ end
 pool[10000] Tx ts;
 var Tx&& t0 = null;
 var Tx&& tF = null;
-loop i in [0 |> 10000[ do
+loop i in [0 -> 10000[ do
     var Tx&&? t = spawn Tx in ts with
         this.id = 10000-i;
     end;
@@ -49640,7 +49640,7 @@ end
 
 pool[10000] Tx ts;
 var Tx&& tF = null;
-loop i in [0 |> 10000[ do
+loop i in [0 -> 10000[ do
 var Tx&& t0 = null;
     var Tx&&? t = spawn Tx in ts with
         this.id = 10000-i;
@@ -50690,7 +50690,7 @@ do
 end
 do
     vector[100] int v;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         v[i] = i;
     end
 end
@@ -51470,7 +51470,7 @@ end
 
 pool[9999] Tx ts;
 var Tx&& t0 = null;
-loop i in [0 |> 9999[ do
+loop i in [0 -> 9999[ do
     var Tx&&? t = spawn Tx with
         this.id = 9999-i;
     end;
@@ -51499,7 +51499,7 @@ do
 end
 
 pool[9999] Tx ts;
-loop i in [0 |> 9999[ do
+loop i in [0 -> 9999[ do
     var Tx&& t0 = null;
     var Tx&&? t = spawn Tx with
         this.id = 9999-i;
@@ -51907,7 +51907,7 @@ end
 Test { [[
 input void A;
 await A;
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
 end
 escape 1;
 ]],
@@ -52698,8 +52698,8 @@ do
     var& int p = &v;
     async/thread (p) do
         var int ret = 0;
-        loop i in [0 |> 50000[ do
-            loop j in [0 |> 50000[ do
+        loop i in [0 -> 50000[ do
+            loop j in [0 -> 50000[ do
                 ret = ret + i + j;
             end
         end
@@ -58431,7 +58431,7 @@ par do
     do
 native _int;
         var _int[100] iss = [];
-        loop i in [0 |> 100[ do
+        loop i in [0 -> 100[ do
             iss[i] = i;
         end
     end
@@ -60163,7 +60163,7 @@ traverse n in &&list do
     sum = sum + 1;
     if (*n is Cons) then
         sum = sum + (*n is Cons).head;
-        loop i in [0 |> 1[ do
+        loop i in [0 -> 1[ do
             traverse &&(*n is Cons).tail;
         end
     end
@@ -60192,7 +60192,7 @@ traverse n in &&list do
     sum = sum + 1;
     if (*n is Cons) then
         sum = sum + (*n is Cons).head;
-        //loop i in [0 |> 1[ do
+        //loop i in [0 -> 1[ do
             traverse &&(*n is Cons).tail;
         //end
     end
@@ -60222,7 +60222,7 @@ traverse n in &&list do
     sum = sum + 1;
     if (*n is Cons) then
         sum = sum + (*n is Cons).head;
-        //loop i in [0 |> 1[ do
+        //loop i in [0 -> 1[ do
             traverse &&(*n is Cons).tail;
         //end
     end
@@ -60638,7 +60638,7 @@ with
                 escape 1;
 
             else/if (*widget is Row) then
-                loop i in [0 |> 3[ do
+                loop i in [0 -> 3[ do
                     par/or do
                         var int ret = traverse &&(*widget as Row).w1;
                         if ret == 0 then
@@ -61278,7 +61278,7 @@ do
             inc = 1;
         end
     end
-    loop i in [0|>angle[ do
+    loop i in [0->angle[ do
         await 10ms;
         turtle.angle = turtle.angle + inc;
     end
@@ -61418,7 +61418,7 @@ traverse cmd in &&cmds do
             traverse &&(*cmd as Sequence).two;
 
         else/if (*cmd is Repeat) then
-            loop i in [0|>(*cmd as Repeat).times[ do
+            loop i in [0->(*cmd as Repeat).times[ do
                 ret = ret + 3;
                 traverse &&(*cmd as Repeat).command;
             end
@@ -61481,7 +61481,7 @@ traverse cmd in &&cmds do
             traverse &&(*cmd as Sequence).two;
 
         else/if (*cmd is Repeat) then
-            loop i in [0|>(*cmd as Repeat).times[ do
+            loop i in [0->(*cmd as Repeat).times[ do
                 ret = ret + 3;
                 traverse &&(*cmd as Repeat).command;
             end
@@ -61715,7 +61715,7 @@ data List;
 
 pool[10] List list;
 
-loop i in [0 |> 10[ do
+loop i in [0 -> 10[ do
     traverse l in &&list do
         if (*l is Nil) then
             list = new Cons(i, Nil());
@@ -62376,7 +62376,7 @@ escape ret;
 }
 
 Test { [[
-loop v in [0 |> 10[ do
+loop v in [0 -> 10[ do
     traverse 1;
 end
 ]],
@@ -63746,15 +63746,15 @@ par/or do
     _assert(tm_app.v == 0);
 
     await 1ms/_;
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 1);
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 2);
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 3);
@@ -63769,15 +63769,15 @@ par/or do
     _assert(tm_app.v == 0);
 
     await 1ms/_;
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 1);
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 2);
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 3);
@@ -63826,15 +63826,15 @@ par/or do
     _assert(tm_app.v == 0);
 
     await 1ms/_;
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 1);
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 2);
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     _assert(tm_app.v == 3);
@@ -63953,17 +63953,17 @@ par/or do
     emit tm.go_backward => 1;
     _assert(tm_app.v == 3);
 
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 2);
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 1);
-    loop i in [0 |> 20[ do
+    loop i in [0 -> 20[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
@@ -63978,17 +63978,17 @@ par/or do
     emit tm.go_backward => 2;
     _assert(tm_app.v == 3);
 
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 2);
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 1);
-    loop i in [0 |> 10[ do
+    loop i in [0 -> 10[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
@@ -64041,17 +64041,17 @@ par/or do
     emit tm.go_backward => -5;
     _assert(tm_app.v == 3);
 
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 2);
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
     _assert(tm_app.v == 1);
-    loop i in [0 |> 100[ do
+    loop i in [0 -> 100[ do
         await 50ms/_;
     end
     TM_AWAIT_SEEK(tm);
@@ -64284,19 +64284,19 @@ end;
 
 par/or do
     async do
-        loop i in [0 |> 300[ do
+        loop i in [0 -> 300[ do
             emit 10ms;
             emit DT => 10;
         end
         var int v = 1;
         emit KEY => &&v;
-        loop i in [0 |> 300[ do
+        loop i in [0 -> 300[ do
             emit 10ms;
             emit DT => 10;
         end
         v = 2;
         emit KEY => &&v;
-        loop i in [0 |> 300[ do
+        loop i in [0 -> 300[ do
             emit 10ms;
             emit DT => 10;
         end
@@ -64427,7 +64427,7 @@ do
     native do
         ##define std__vector_FileReader std::vector<FileReader>
     end
-    loop i in [0|>this.plf:get_objects().size()[ do
+    loop i in [0->this.plf:get_objects().size()[ do
         traverse _ in [] with
             var _FileReader&& reader = &&this.plf:get_objects().at(i);
         do
@@ -65624,7 +65624,7 @@ escape 1;
 -- TODO: invalid pointer access
 Test { [[
 var int* ptr = null;
-loop i in [0 |> 100[ do
+loop i in [0 -> 100[ do
     await 1s;
     var int* p;
     if (ptr != null) then
@@ -65877,7 +65877,7 @@ if false then
     watching ptr do end
 else
     pool[257] Rect rs;
-    loop i in [0 |> 257[ do
+    loop i in [0 -> 257[ do
         spawn Rect in rs;
     end
 end
@@ -66421,7 +66421,7 @@ ra = ra | 1<<18;
 var byte* orig = "multiboot";
 
 loop do
-    loop i in [0 |> 9[ do
+    loop i in [0 -> 9[ do
         if buf[i] != orig[i] then
             await FOREVER;
         end
@@ -66925,7 +66925,7 @@ native do
 end
 
 var int ret = 0;
-loop/1 v in [0|>_VS[ do      // think its numeric
+loop/1 v in [0->_VS[ do      // think its numeric
     if v == null then
         break;
     else
