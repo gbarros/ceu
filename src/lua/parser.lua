@@ -361,7 +361,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
            K'end'
 
     , __Do  = K'do' * V'Block' * K'end'
-    , _Dopre = K'pre' * V'__Do'
+    --, _Dopre = K'pre' * V'__Do'
 
     , Block = V'_Stmts'
 
@@ -405,6 +405,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
     , CallStmt = V'__Exp_Call'
 
+--[[
     , Finalize = K'do' *
                     V'Block' *
                  K'finalize' * OPT(V'Explist') * K'with' *
@@ -422,6 +423,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
                     KK'[' * V'Explist' * KK']' *
                     OPT(PARENS(V'Varlist')) *
                 V'__Do'
+]]
     , Atomic  = K'atomic' * V'__Do'
 
 -- CODE / EXTS (call, req)
@@ -606,6 +608,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , __Sets_many = ((CKK'='+CKK':=')-'==') * (V'__sets_many' + PARENS(V'__sets_many'))
 
     , __sets_one =
+--[[
           V'_Set_Data'
         + V'_Set_Emit_Ext_emit' + V'_Set_Emit_Ext_call' + V'_Set_Emit_Ext_req'
         + V'_Set_Do'
@@ -616,12 +619,16 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
         + V'_Set_Lua'
         + V'_Set_Vec'
         + V'_Set_None'
+]]
+          P(false)
         + V'_Set_Exp'
 
-    , __sets_many = V'_Set_Emit_Ext_req' + V'_Set_Await' + V'_Set_Watching'
+    --, __sets_many = V'_Set_Emit_Ext_req' + V'_Set_Await' + V'_Set_Watching'
+    , __sets_many = P(false)
 
     -- after `=´
 
+--[[
     , _Set_Do       = #(K'do'*KK'/')    * V'Do'
     , _Set_Await    = #K'await'         * V'_Awaits'
     , _Set_Watching = #K'watching'      * V'_Watching'
@@ -631,6 +638,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , _Set_Vec      = #V'__vec_pre'     * V'_Vec_New'
     , _Set_Data     = #V'__data_pre'    * V'Data_New'
     , _Set_None     = #K'_'             * V'ID_none'
+]]
     , _Set_Exp      =                     V'__Exp'
 
     , _Set_Emit_Ext_emit  = #K'emit'          * V'Emit_Ext_emit'
@@ -716,7 +724,8 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 ---------
                 -- "Ct" as a special case to avoid "too many captures" (HACK_1)
     , _Stmts  = Ct (( V'__Stmt_Simple' * V'__seqs' +
-                      V'__Stmt_Block' * (KK';'^0)
+                      --V'__Stmt_Block' * (KK';'^0)
+                      P(false)
                    )^0
                  * ( V'__Stmt_Last' * V'__seqs' +
                      V'__Stmt_Last_Block' * (KK';'^0)
@@ -745,6 +754,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 + I((K'class'+K'interface'+K'traverse')) * E'TODO: class/interface'
              + V'CallStmt' -- last
 
+--[[
     , __Stmt_Block = V'Code_impl' + V'Extcall_impl' + V'_Extreq_impl'
               + V'_Data_block'
               + V'Nat_Block'
@@ -758,6 +768,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
               + V'Async' + V'_Thread' + V'_Isr' + V'Atomic'
               + V'_Dopre'
               + V'_Lua'
+]]
 
     --, _C = '/******/' * (P(1)-'/******/')^0 * '/******/'
     , _C      = m.Cg(V'_CSEP','mark') *
