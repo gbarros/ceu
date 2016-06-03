@@ -23451,7 +23451,7 @@ escape r1+r2;
 }
 
 Test { [[
-vector[1] vs = [0,0];
+vector[1] int vs = [0,0];
 vs[true as int] = 1;
 escape vs[1];
 ]],
