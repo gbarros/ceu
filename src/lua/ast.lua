@@ -344,7 +344,8 @@ local function f (ln, v1, op, v2, v3, ...)
     return ret
 end
 
-local t = { '', '_Num', '_Bool', '_Lval' }
+local t = { '', '_Nat', '_Num', '_Bool', '_Ptr', '_Lval', '_Field', '_Call' }
+--local t = { '' }
 for _, suf in ipairs(t) do
     for i=1, 12 do
         local tag = '__'..i..suf

@@ -32,6 +32,8 @@ function check (mod)
     local ok, msg = pcall(dofile, mod..'.lua')
     if T[mod]~=nil then
         assert(ok==false, 'no error found')
+-- TODO: remove to restore parser errors
+--do return end
 -- TODO: remove class/interface
 if string.find(msg,'expected TODO: class/interface',nil,true) then
         return false
@@ -40,6 +42,8 @@ else
 end
         return false
     else
+-- TODO: remove to restore parser errors
+--do return true end
 -- TODO: remove class/interface
 if (not ok) and string.find(msg,'expected TODO: class/interface',nil,true) then
         return false
@@ -94,11 +98,12 @@ Test = function (t)
     end
 
     if not check('parser')   then return end
+do return end
+    if not check('parser')   then return end
     if not check('ast')      then return end
     if not check('adjs')     then return end
     if not check('tops')     then return end
     if not check('locs')     then return end
-do return end
     AST.dump(AST.root)
     if not check('sval')     then return end
     if not check('env')      then return end

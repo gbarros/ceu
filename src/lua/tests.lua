@@ -10,7 +10,6 @@ end
 
 --[===[
 do return end
---]===]
 
 ----------------------------------------------------------------------------
 -- OK: well tested
@@ -27,6 +26,14 @@ Test { [[escape /*
 Test { [[escape /**/* **/ 1;]], run=1 }
 Test { [[escape /**/* */ 1;]],
     parser = 'line 1 : after `escape´ : expected `escape´ identifier',
+}
+
+Test { [[
+do
+end
+escape 1;
+]],
+    run = 1
 }
 
 Test { [[
@@ -89,6 +96,7 @@ Test { [[escape 1+2*3;]], run=7 }
 Test { [[escape(4/2*3);]], run=6 }
 Test { [[escape 2-1;]], run=1 }
 
+--]===]
 Test { [[escape 1==2;]], run=0 }
 Test { [[escape 0  or  10;]], run=1 }
 Test { [[escape 0 and 10;]], run=0 }
@@ -21635,6 +21643,14 @@ Test { [[var int a; var int&&pa; a=1; pa=&&a; *pa=3; escape a;]], run=3 }
 Test { [[
 native _V;
 *(0x100 as u32&&) = _V;
+escape 1;
+]],
+    parser = 'TODO: exp-ptr',
+}
+
+Test { [[
+native _V;
+*(0x100 as _u32&&) = _V;
 escape 1;
 ]],
     gcc = 'error: ‘V’ undeclared (first use in this function)',
