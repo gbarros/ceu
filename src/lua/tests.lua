@@ -10,13 +10,14 @@ end
 
 --[===[
 do return end
+--]===]
 
 ----------------------------------------------------------------------------
 -- OK: well tested
 ----------------------------------------------------------------------------
 
-Test { [[escape (1);]], run=1 }
 Test { [[escape 1;]], run=1 }
+Test { [[escape (1);]], run=1 }
 
 Test { [[escape 1; // escape 1;]], run=1 }
 Test { [[escape /* */ 1;]], run=1 }
@@ -96,12 +97,15 @@ Test { [[escape 1+2*3;]], run=7 }
 Test { [[escape(4/2*3);]], run=6 }
 Test { [[escape 2-1;]], run=1 }
 
---]===]
 Test { [[escape 1==2;]], run=0 }
-Test { [[escape 0  or  10;]], run=1 }
-Test { [[escape 0 and 10;]], run=0 }
+Test { [[escape 0  or  10;]], parser='TODO: exp-bool', }
+Test { [[escape false  or  true;]], run=1 }
+Test { [[escape false and true;]], run=0 }
 Test { [[escape 2>1 and 10!=0;]], run=1 }
-Test { [[escape (1<=2) + (1<2) + 2/1 - 2%3;]], run=2 }
+Test { [[escape (1<=2) + (1<2) + 2/1 - 2%3;]], parser='TODO: exps' }
+Test { [[escape (1<=2) as int;]], run=2 }
+Test { [[escape ((1<=2) as int) + 1>1;]], run=2 }
+Test { [[escape ((1<=2) as int) + ((1<2) as int) + 2/1 - 2%3;]], run=2 }
 -- TODO: linux gcc only?
 --Test { [[escape (~(~0b1010 & 0XF) | 0b0011 ^ 0B0010) & 0xF;]], run=11 }
 Test { [[nt a;]],
@@ -114,7 +118,9 @@ Test { [[var int sizeof;]],
     parser = "line 1 : after `int´ : expected type modifier or internal identifier",
 }
 Test { [[escape sizeof(int);]], run=4 }
-Test { [[escape 1<2>3;]], run=0 }
+Test { [[escape 1<2>3;]], parser='TODO: exp', }
+Test { [[escape 1<2 as int >3;]], run=0 }
+Test { [[escape (1<2 as int)>3;]], run=0 }
 
 -->>> NATIVE
 

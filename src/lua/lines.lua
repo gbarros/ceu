@@ -1,5 +1,5 @@
 m = require 'lpeg'
-m.setmaxstack(1000)
+m.setmaxstack(10000)
 
 local LINE = 1
 local FILE = OPTS.input

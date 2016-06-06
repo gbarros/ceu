@@ -349,7 +349,9 @@ local t = { '', '_Nat', '_Num', '_Bool', '_Ptr', '_Lval', '_Field', '_Call' }
 for _, suf in ipairs(t) do
     for i=1, 12 do
         local tag = '__'..i..suf
-        GG[tag] = (m.Cp()/i2l) * GG[tag] / f
+        if GG[tag] then
+            GG[tag] = (m.Cp()/i2l) * GG[tag] / f
+        end
     end
 end
 

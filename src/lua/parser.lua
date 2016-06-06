@@ -430,6 +430,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
     -- CODE
 
+--[[
     , __code   = (CK'code/instantaneous' + CK'code/delayed')
                     * OPT(CK'/recursive')
                     * V'__ID_abs'
@@ -438,6 +439,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , Code_impl  = V'__code' * V'Typepars_ids' *
                                     KK'=>' * V'Type' *
                    V'__Do'
+]]
 
     , _Spawn_Block = K'spawn' * V'__Do'
     , Spawn_Code   = K'spawn' * V'CALL'
@@ -445,6 +447,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     -- EXTS
 
     -- call
+--[[
     , __extcall = (CK'input' + CK'output')
                     * OPT(CK'/recursive')
                     * V'__ID_ext'
@@ -453,8 +456,10 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , Extcall_impl  = V'__extcall' * V'Typepars_ids' *
                                         KK'=>' * V'Type' *
                        V'__Do'
+]]
 
     -- req
+--[[
     , __extreq = (CK'input/output' + CK'output/input')
                    * OPT('[' * (V'__Exp_Num'+Cc(true)) * KK']')
                    * V'__ID_ext'
@@ -463,6 +468,7 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , _Extreq_impl  = V'__extreq' * V'Typepars_ids' *
                                         KK'=>' * V'Type' *
                       V'__Do'
+]]
 
     -- TYPEPARS
 
@@ -594,10 +600,12 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
 -- DETERMINISTIC
 
+--[[
     , __det_id = V'ID_ext' + V'ID_int' + V'ID_abs' + V'ID_nat'
     , Deterministic = K'deterministic' * V'__det_id' * (
                         K'with' * V'__det_id' * (KK',' * V'__det_id')^0
                       )^-1
+]]
 
 -- SETS
 
@@ -724,13 +732,13 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 ---------
                 -- "Ct" as a special case to avoid "too many captures" (HACK_1)
     , _Stmts  = Ct (( V'__Stmt_Simple' * V'__seqs' +
-                      --V'__Stmt_Block' * (KK';'^0)
-                      P(false)
+                      V'__Stmt_Block' * (KK';'^0)
                    )^0
                  * ( V'__Stmt_Last' * V'__seqs' +
                      V'__Stmt_Last_Block' * (KK';'^0)
                    )^-1
-                 * (V'Nat_Block'+V'Code_impl')^0 )
+                 --* (V'Nat_Block'+V'Code_impl')^0 )
+                 * (V'Nat_Block')^0 )
 
     , __Stmt_Last  = V'_Escape' + V'_Break' + V'_Continue' + V'Await_Forever'
     , __Stmt_Last_Block = V'Par'
@@ -741,9 +749,9 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
                  + V'_Evts_set'  + V'_Evts'
                  + V'_Exts'
                  + V'_Data_simple'
-                 + V'Code_proto' + V'Extcall_proto' + V'_Extreq_proto'
+                 --+ V'Code_proto' + V'Extcall_proto' + V'_Extreq_proto'
                  + V'_Nats'  + V'Nat_End'
-                 + V'Deterministic'
+                 --+ V'Deterministic'
                  + V'_Set_one' + V'_Set_many'
                  + V'_Awaits'
                  + V'Emit_Ext_emit' + V'Emit_Ext_call' + V'Emit_Ext_req'
@@ -754,11 +762,12 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 + I((K'class'+K'interface'+K'traverse')) * E'TODO: class/interface'
              + V'CallStmt' -- last
 
+    , __Stmt_Block = V'Do'
 --[[
-    , __Stmt_Block = V'Code_impl' + V'Extcall_impl' + V'_Extreq_impl'
+              + V'If'
+              + V'Code_impl' + V'Extcall_impl' + V'_Extreq_impl'
               + V'_Data_block'
               + V'Nat_Block'
-              + V'Do'    + V'If'
               + V'Loop' + V'_Loop_Num' + V'_Loop_Pool'
               + V'_Every'
               + V'_Spawn_Block'
@@ -800,190 +809,200 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
 --[=[
 ]=]
-    , __Exp_Call  = V'__1_Call'
 --[[
 ]]
-    , __1_Call    = V'__2_Call'
-    , __2_Call    = V'__3_Call'
-    , __3_Call    = V'__4_Call'
-    , __4_Call    = V'__5_Call'
-    , __5_Call    = V'__6_Call'
-    , __6_Call    = V'__7_Call'
-    , __7_Call    = V'__8_Call'
-    , __8_Call    = V'__9_Call'
-    , __9_Call    = V'__10_Call'
-    , __10_Call   = V'__11_Call'
-    , __11_Call   = V'__12_Lval' * V'__call'
-                  + V'__12_Call'
-    , __12_Call   = PARENS(V'__Exp_Call')
+    , __Exp_Call  = V'__06_Call'
+    , __01_Call   = V'__06_Call'
+    , __02_Call   = V'__06_Call'
+    , __03_Call   = V'__06_Call'
+    , __04_Call   = V'__06_Call'
+    , __05_Call   = V'__06_Call'
+    , __06_Call   = V'__06_as' + V'__07_Call'
+    , __07_Call   = V'__14_Call'
+    , __08_Call   = V'__14_Call'
+    , __09_Call   = V'__14_Call'
+    , __10_Call   = V'__14_Call'
+    , __11_Call   = V'__14_Call'
+    , __12_Call   = V'__14_Call'
+    , __13_Call   = V'__14_Call'
+    , __14_Call   = V'__15_Lval' * V'__call'
+                  + V'__15_Call'
+    , __15_Call   = PARENS(V'__Exp_Call')
                   + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
-                  + CK'call'           * V'__Exp_Call'
-                  + CK'call/recursive' * V'__Exp_Call'
+                  + CK'call'           * V'__Exp'
+                  + CK'call/recursive' * V'__Exp'
 
 -- FIELD
 
-    , __Exp_Field  = V'__1_Field'
 --[[
 ]]
-    , __1_Field    = V'__2_Field'
-    , __2_Field    = V'__3_Field'
-    , __3_Field    = V'__4_Field' * V'__cast'^0
-    , __4_Field    = V'__5_Field'
-    , __5_Field    = V'__6_Field'
-    , __6_Field    = V'__7_Field'
-    , __7_Field    = V'__8_Field'
-    , __8_Field    = V'__9_Field'
-    , __9_Field    = V'__10_Field'
-    , __10_Field   = V'__11_Field'
-    , __11_Field   = V'__12_Lval' * (V'__field')^1
-                   + V'__12_Field'
-    , __12_Field   = PARENS(V'__12_Field') + V'ID_int'
+    , __Exp_Field  = V'__06_Field'
+    , __01_Field   = V'__06_Field'
+    , __02_Field   = V'__06_Field'
+    , __03_Field   = V'__06_Field'
+    , __04_Field   = V'__06_Field'
+    , __05_Field   = V'__06_Field'
+    , __06_Field   = V'__06_as' + V'__07_Field'
+    , __07_Field   = V'__14_Field'
+    , __08_Field   = V'__14_Field'
+    , __09_Field   = V'__14_Field'
+    , __10_Field   = V'__14_Field'
+    , __11_Field   = V'__14_Field'
+    , __12_Field   = V'__14_Field'
+    , __13_Field   = V'__14_Field'
+    , __14_Field   = V'__15_Lval' * V'__field'^1
+                   + V'__15_Field'
+    , __15_Field   = PARENS(V'__Exp_Field') + V'ID_int'
 
 -- LVAL
 
-    , __Exp_Lval  = V'__1_Lval'
-    , __1_Lval    = V'__2_Lval'
-    , __2_Lval    = V'__3_Lval'
-    , __3_Lval    = V'__4_Lval' * V'__cast'^0
-    , __4_Lval    = V'__5_Lval'
-    , __5_Lval    = V'__6_Lval'
-    , __6_Lval    = V'__7_Lval'
-    , __7_Lval    = V'__8_Lval'
-    , __8_Lval    = V'__9_Lval'
-    , __9_Lval    = V'__10_Lval'
-    , __10_Lval   = (Cc(false) * (CKK'$'-'$$'))^-1 * (Cc(false) * CKK'*')^1 *
-                                                        (V'__11_Ptr' + V'__11_Nat')
-                  + (Cc(false) * (CKK'$'-'$$'))^-1 * V'__11_Lval'
-    , __11_Lval   = V'__12_Lval' * (V'__idx' + V'__field' + V'__opt_get')^0
-    , __12_Lval   = PARENS(V'__Exp_Lval')
+--[[
+]]
+    , __Exp_Lval  = V'__06_Lval'
+    , __01_Lval   = V'__06_Lval'
+    , __02_Lval   = V'__06_Lval'
+    , __03_Lval   = V'__06_Lval'
+    , __04_Lval   = V'__06_Lval'
+    , __05_Lval   = V'__06_Lval'
+    , __06_Lval   = V'__06_as' + V'__07_Lval'
+    , __07_Lval   = V'__13_Lval'
+    , __08_Lval   = V'__13_Lval'
+    , __09_Lval   = V'__13_Lval'
+    , __10_Lval   = V'__13_Lval'
+    , __11_Lval   = V'__13_Lval'
+    , __12_Lval   = V'__13_Lval'
+    , __13_Lval   = (Cc(false) * (CKK'$'-'$$'))^-1 * (
+                        (Cc(false) * CKK'*') *
+                            (Cc(false) * (CKK'*' + (CKK'&&'*-P'&')))^0 *
+                                (V'__14_Ptr' + V'__14_Nat') +
+                        V'__14_Lval'
+                    )
+    , __14_Lval   = V'__15_Lval' * (V'__idx' + V'__field' + V'__opt_get')^0
+    , __15_Lval   = PARENS(V'__Exp_Lval')
                   + V'ID_int'  + V'ID_nat'
                   + V'Global'  + V'This'   + V'Outer'
                   + V'Nat_Exp'
---[[
-]]
 
 -- PTR
 
-    , __Exp_Ptr  = V'__1_Ptr'
 --[[
 ]]
-    , __1_Ptr    = V'__2_Ptr'
-    , __2_Ptr    = V'__3_Ptr'
-    , __3_Ptr    = (V'__4_Ptr'+V'__4_Nat') * V'__cast'^0
-    , __4_Ptr    = V'__5_Ptr'
-    , __5_Ptr    = V'__6_Ptr'
-    , __6_Ptr    = V'__7_Ptr'
-    , __7_Ptr    = V'__8_Ptr'
-    --, __8_Ptr    = V'__9_Ptr'
-    , __8_Ptr    = V'__9_Ptr' * ((CKK'+'+CKK'-') * V'__9_Num')^0
-    , __9_Ptr    = V'__10_Ptr'
-    , __10_Ptr   = ( Cc(false) * (CKK'*' + (CKK'&&'-P'&'^3)))^1 * V'__11_Lval'
-                 + V'__11_Ptr'
-    , __11_Ptr   = V'__12_Lval' * (V'__call'  + V'__idx' +
-                                   V'__field' + V'__opt_get')^1
-                 + V'__12_Lval'
-                 + V'__12_Call'
-                 + V'__12_Ptr'
-    , __12_Ptr   = PARENS(V'__Exp_Ptr') + V'NULL' + V'STRING'
+    , __Exp_Ptr  = V'__06_Ptr'
+    , __01_Ptr   = V'__06_Ptr'
+    , __02_Ptr   = V'__06_Ptr'
+    , __03_Ptr   = V'__06_Ptr'
+    , __04_Ptr   = V'__06_Ptr'
+    , __05_Ptr   = V'__06_Ptr'
+    , __06_Ptr   = V'__06_as' + V'__07_Ptr'
+    , __07_Ptr   = V'__11_Ptr'
+    , __08_Ptr   = V'__11_Ptr'
+    , __09_Ptr   = V'__11_Ptr'
+    , __10_Ptr   = V'__11_Ptr'
+    , __11_Ptr   = V'__12_Ptr' * ((CKK'+'+CKK'-') * V'__12_Num')^0
+    , __12_Ptr   = V'__13_Ptr'
+    , __13_Ptr   = (Cc(false) * (CKK'*' + (CKK'&&'*-P'&')))^1 * V'__14_Lval'
+                 + V'__14_Ptr'
+    , __14_Ptr   = V'__15_Ptr' * (V'__call'  + V'__idx' +
+                                  V'__field' + V'__opt_get')^0
+                 + V'__15_Lval'
+                 + V'__15_Call'
+    , __15_Ptr   = PARENS(V'__Exp_Ptr') + V'NULL' + V'STRING'
 
 -- BOOL
 
-    , __b     = (V'__4_Bool' + V'__b_num' + V'__b_ptr' + V'__b_is' + V'__b_as')
-    , __b_num = V'__4_Num' * ( (CKK'!='-'!==')+CKK'=='+CKK'<='+CKK'>='
-                               + (CKK'<'-'<<')+(CKK'>'-'>>')
-                               ) * V'__4_Num'
-    , __b_ptr = V'__4_Ptr' * ((CKK'!='-'!==')+CKK'==') * V'__4_Ptr'
-    --, __b_is  = P(false)
-    --, __b_as  = P(false)
-    , __b_is  = V'__4' * (CK'is' * V'Type')^1
-    , __b_as  = V'__4' * (#(K'as'*K'bool') * V'__cast')^1
 --[[
 ]]
-
-    , __Exp_Bool = V'__1_Bool'
-    , __1_Bool   = V'__2_Bool' * (CK'or'  * V'__2_Bool')^0
-    , __2_Bool   = V'__3_Bool' * (CK'and' * V'__3_Bool')^0
-    --, __3_Bool   = P(false)
-    --, __3_Bool   = V'__b_num'
-    , __3_Bool   = V'__b' * (((CKK'!='-'!==')+CKK'==') * V'__b')^0
-    , __4_Bool   = V'__5_Bool'
-    , __5_Bool   = V'__6_Bool'
-    , __6_Bool   = V'__7_Bool'
-    , __7_Bool   = V'__8_Bool'
-    , __8_Bool   = V'__9_Bool'
-    , __9_Bool   = V'__10_Bool'
-    , __10_Bool  = (Cc(false) * CK'not')^0 * (Cc(false) * CKK'*')^1 *
-                                                (V'__11_Ptr' + V'__11_Nat')
-                 + (Cc(false) * CK'not')^0 * V'__11_Bool'
-    , __11_Bool  = V'__12_Lval' * (V'__call' + V'__idx' + V'__field' +
-                                   V'__opt_get' + V'__opt_ask')^1
-                 + V'__12_Lval'
-                 + V'__12_Call'
-                 + V'__12_Bool'
-    , __12_Bool  = PARENS(V'__Exp_Bool') + V'BOOLEAN'
---[[
-]]
+    , __Exp_Bool  = V'__01_Bool'
+    , __01_Bool   = V'__02_Bool'  * (CK'or'         * V'__02_Bool')^0
+    , __02_Bool   = V'__03_Bool'  * (CK'and'        * V'__03_Bool')^0
+    , __03_Bool   = V'__04'       * (CK'is'         * V'Type')^1
+                  + V'__04_Bool'
+    , __04_Bool   = V'__05_Bool'  * (V'__op_eq_neq' * V'__05_Bool')^0
+                  + V'__05'       * (V'__op_eq_neq' * V'__05')
+    , __05_Bool   = V'__06_Num'   * (V'__op_rel'    * V'__06_Num')
+                  + V'__06_Bool'
+    , __06_Bool   = V'__06_as' + V'__07_Bool'
+    , __07_Bool   = V'__13_Bool'
+    , __08_Bool   = V'__13_Bool'
+    , __09_Bool   = V'__13_Bool'
+    , __10_Bool   = V'__13_Bool'
+    , __11_Bool   = V'__13_Bool'
+    , __12_Bool   = V'__13_Bool'
+    , __13_Bool   = (Cc(false) * CK'not')^0 * (
+                         (Cc(false) * CKK'*')^1 * (V'__11_Ptr' + V'__11_Nat') +
+                         V'__14_Bool'
+                    )
+    , __14_Bool   = V'__15_Lval' * (V'__call'  + V'__idx' + V'__field' +
+                                    V'__opt_get' + V'__opt_ask')^0
+                  + V'__15_Call'
+                  + V'__15_Bool'
+    , __15_Bool   = PARENS(V'__Exp_Bool') + V'BOOLEAN'
 
 -- NUM
 
-    , __Exp_Num  = V'__1_Num'
-    , __1_Num    = V'__2_Num'
-    , __2_Num    = V'__3_Num'
-    , __3_Num    = (V'__4_Num'+V'__4_Nat') * V'__cast'^0
-    , __4_Num    = V'__5_Num'   * ((CKK'|'-'||') * V'__5_Num')^0
-    , __5_Num    = V'__6_Num'   * (CKK'^' * V'__6_Num')^0
-    , __6_Num    = V'__7_Num'   * (CKK'&' * V'__7_Num')^0
-    , __7_Num    = V'__8_Num'   * ((CKK'>>'+CKK'<<') * V'__8_Num')^0
-    , __8_Num    = V'__9_Num'   * ((CKK'+'+CKK'-') * V'__9_Num')^0
-    , __9_Num    = V'__10_Num'  * ((CKK'*'+(CKK'/'-'//'-'/*')+CKK'%') * V'__10_Num')^0
-    , __10_Num   = (Cc(false)   * (CKK'-'+CKK'+'+CKK'~'+CKK'*'))^0    * V'__11_Num'
-                 + (Cc(false)   * (CKK'$$' + (CKK'$'-'$$')))^0 * V'__11_Lval'
-    , __11_Num   = V'__12_Lval' * (V'__call'  + V'__idx' +
-                                   V'__field' + V'__opt_get')^1
-                 + V'__12_Lval'
-                 + V'__12_Call'
-                 + V'__12_Num'
-    , __12_Num   = PARENS(V'__Exp_Num') + V'SIZEOF' + V'NUMBER'
+    , __Exp_Num  = V'__06_Num'
+    , __01_Num   = V'__06_Num'
+    , __02_Num   = V'__06_Num'
+    , __03_Num   = V'__06_Num'
+    , __04_Num   = V'__06_Num'
+    , __05_Num   = V'__06_Num'
+    , __06_Num   = V'__06_as'
+                 + V'__07_Num'
+    , __07_Num   = V'__08_Num' * ((CKK'|'-'||')  * V'__08_Num')^0
+    , __08_Num   = V'__09_Num' * (CKK'^' * V'__09_Num')^0
+    , __09_Num   = V'__10_Num' * (CKK'&' * V'__10_Num')^0
+    , __10_Num   = V'__11_Num' * ((CKK'>>'+CKK'<<') * V'__11_Num')^0
+    , __11_Num   = V'__12_Num' * ((CKK'+'+CKK'-') * V'__12_Num')^0
+    , __12_Num   = V'__13_Num' * ((CKK'*'+(CKK'/'-'//'-'/*')+CKK'%') * V'__13_Num')^0
+    , __13_Num   = (Cc(false)  * (CKK'-'+CKK'+'+CKK'~'))^0 * (
+                         (Cc(false) * CKK'*')^1 * (V'__11_Ptr' + V'__11_Nat') +
+                         (Cc(false) * (CKK'$$' + (CKK'$'-'$$'))) * V'__11_Lval' +
+                         V'__14_Num'
+                   )
+    , __14_Num   = V'__15_Lval' * (V'__call'  + V'__idx' +
+                                   V'__field' + V'__opt_get')^0
+                 + V'__15_Call'
+                 + V'__15_Num'
+    , __15_Num   = PARENS(V'__Exp_Num') + V'SIZEOF' + V'NUMBER'
 --[[
 ]]
 
 -- NAT
 
-    , __Exp_Nat  = V'__1_Nat'
-    , __1_Nat    = V'__2_Nat'
-    , __2_Nat    = V'__3_Nat'
-    , __3_Nat    = V'__4_Nat' * (#(K'as'*'_') * V'__cast')^0
-    , __4_Nat    = V'__5_Nat'
-    , __5_Nat    = V'__6_Nat'
-    , __6_Nat    = V'__7_Nat'
-    , __7_Nat    = V'__8_Nat'
-    , __8_Nat    = V'__9_Nat'
-    , __9_Nat    = V'__10_Nat'
-    , __10_Nat   = ( Cc(false) * (CKK'&&'-P'&'^3))^0 * V'__11_Nat'
-    , __11_Nat   = V'__12_Nat' * (V'__call'  + V'__idx' +
-                                  V'__field' + V'__opt_get')^0
-    , __12_Nat   = PARENS(V'__Exp_Nat') + V'ID_nat' + V'Nat_Exp'
 --[[
 ]]
+    , __Exp_Nat  = V'__06_Nat'
+    , __01_Nat   = V'__06_Nat'
+    , __02_Nat   = V'__06_Nat'
+    , __03_Nat   = V'__06_Nat'
+    , __04_Nat   = V'__06_Nat'
+    , __05_Nat   = V'__06_Nat'
+    , __06_Nat   = V'__06_as' + V'__07_Nat'
+    , __07_Nat   = V'__14_Nat'
+    , __08_Nat   = V'__14_Nat'
+    , __09_Nat   = V'__14_Nat'
+    , __10_Nat   = V'__14_Nat'
+    , __11_Nat   = V'__14_Nat'
+    , __12_Nat   = V'__14_Nat'
+    , __13_Nat   = V'__14_Nat'
+    , __14_Nat   = V'__15_Nat' * (V'__call'  + V'__idx' +
+                                  V'__field' + V'__opt_get')^0
+    , __15_Nat   = PARENS(V'__Exp_Nat') + V'ID_nat' + V'Nat_Exp'
 
 -- EXP
 
-    , __Exp = V'__Exp_Nat' + V'__Exp_Num' + V'__Exp_Bool'
-            + V'__Exp_Ptr' + V'__Exp_Lval' + V'__Exp_Call'
-    , __1   = P(false)
-    , __2   = P(false)
-    , __3   = P(false)
-    --, __4   = P(false)
-    , __4   = V'__4_Nat' + V'__4_Num' + V'__4_Bool'
-            + V'__4_Ptr' + V'__4_Lval' + V'__4_Call'
-    , __5   = P(false)
-    , __6   = P(false)
-    , __7   = P(false)
-    , __8   = P(false)
-    , __9   = P(false)
-    , __10  = P(false)
-    , __11  = P(false)
-    , __12  = P(false)
+    , __Exp = V'__01'
+    , __01  = V'__01_Bool' + V'__02'
+    , __02  = V'__02_Bool' + V'__03'
+    , __03  = V'__03_Bool' + V'__04'
+    , __04  = V'__04_Bool' + V'__05'
+    , __05  = V'__05_Bool' + V'__06'
+    , __06  = V'__06_as'
+            + V'__07'
+    , __07  = V'__07_Nat' + V'__07_Num'  + V'__07_Bool'
+            + V'__07_Ptr' + V'__07_Lval' + V'__07_Call'
+
+    , __06_as = V'__07'  * (CK'as' * V'__as')^1
 
 --[[
     , __Exp_Nat  = V'__Exp'
@@ -994,28 +1013,26 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
     , __Exp_Call = V'__Exp'
     , __Exp_Field = V'__Exp'
 
-    , __Exp  = V'__1'
-    , __1    = V'__2'  * (CK'or'  * V'__2')^0
-    , __2    = V'__3'  * (CK'and' * V'__3')^0
-    , __3    = V'__4'  * ( ( (CKK'!='-'!==')+CKK'=='+CKK'<='+CKK'>='
-                           + (CKK'<'-'<<')+(CKK'>'-'>>')
-                           ) * V'__4'
-                         + CK'is' * V'Type'
-                         + V'__cast'
-                         )^0
-    , __4    = V'__5'  * ((CKK'|'-'||') * V'__5')^0
-    , __5    = V'__6'  * (CKK'^' * V'__6')^0
-    , __6    = V'__7'  * (CKK'&' * V'__7')^0
-    , __7    = V'__8'  * ((CKK'>>'+CKK'<<') * V'__8')^0
-    , __8    = V'__9'  * ((CKK'+'+CKK'-') * V'__9')^0
-    , __9    = V'__10' * ((CKK'*'+(CKK'/'-'//'-'/*')+CKK'%') * V'__10')^0
-    , __10   = ( Cc(false) * ( CK'not'+CKK'-'+CKK'+'+CKK'~'+CKK'*'+
+    , __Exp  = V'__01'
+    , __01   = V'__02'  * (CK'or'         * V'__02')^0
+    , __02   = V'__03'  * (CK'and'        * V'__03')^0
+    , __03   = V'__04'  * (CK'is'         * V'Type')^0
+    , __04   = V'__05'  * (V'__op_eq_neq' * V'__05')^0
+    , __05   = V'__06'  * (V'__op_rel'    * V'__06')^0
+    , __06   = V'__07'  * (CK'as'         * V'__as')^0
+    , __07   = V'__08'  * ((CKK'|'-'||')  * V'__08')^0
+    , __08   = V'__09'  * (CKK'^' * V'__09')^0
+    , __09   = V'__10'  * (CKK'&' * V'__10')^0
+    , __10   = V'__11'  * ((CKK'>>'+CKK'<<') * V'__11')^0
+    , __11   = V'__12'  * ((CKK'+'+CKK'-') * V'__12')^0
+    , __12   = V'__13' * ((CKK'*'+(CKK'/'-'//'-'/*')+CKK'%') * V'__13')^0
+    , __13   = ( Cc(false) * ( CK'not'+CKK'-'+CKK'+'+CKK'~'+CKK'*'+
                                (CKK'&&'-P'&'^3) + (CKK'&'-'&&') +
                                CKK'$$' + (CKK'$'-'$$') )
-               )^0 * V'__11'
-    , __11   = V'__12' * (V'__call'  + V'__idx' +
+               )^0 * V'__14'
+    , __14   = V'__15' * (V'__call'  + V'__idx' +
                           V'__field' + V'__opt_get' + V'__opt_ask')^0
-    , __12   = PARENS(V'__Exp')
+    , __15   = PARENS(V'__Exp')
              + V'SIZEOF'
              + (CK'call' + CK'call/recursive' + Cc'call') * V'CALL'
              + V'ID_int'  + V'ID_nat'
@@ -1028,13 +1045,16 @@ GG = { [1] = X * V'_Stmts' * (P(-1) + E('end of file'))
 
 --
 
+    , __op_eq_neq = (CKK'!='-'!==') + CKK'=='
+    , __op_rel    = CKK'<=' + CKK'>=' + (CKK'<'-'<<') + (CKK'>'-'>>')
+    , __as = V'Type' + KK'/'*(CK'nohold'+CK'plain'+CK'pure')
+
     , __call    = PARENS(Cc'call' * OPT(V'Explist'))
     --, __idx     = KK'[' * Cc'idx' * V'__Exp' * KK']'
     , __idx     = KK'[' * Cc'idx' * V'__Exp_Num' * KK']'
     , __field   = (CKK':'+(CKK'.'-'..')) * (V'__ID_int'+V'__ID_nat')
     , __opt_get = (CKK'!'-'!=')
     , __opt_ask = CKK'?'
-    , __cast    = CK'as' * (V'Type' + KK'/'*(CK'nohold'+CK'plain'+CK'pure'))
 }
 
 if RUNTESTS then

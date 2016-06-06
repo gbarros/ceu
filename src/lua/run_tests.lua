@@ -33,7 +33,7 @@ function check (mod)
     if T[mod]~=nil then
         assert(ok==false, 'no error found')
 -- TODO: remove to restore parser errors
---do return end
+do return end
 -- TODO: remove class/interface
 if string.find(msg,'expected TODO: class/interface',nil,true) then
         return false
